@@ -51,7 +51,14 @@
                         <button class="btn btn-secondary dropdown-toggle mr-3" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Account
                         </button>
-
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            {% if user.is_authenticated %}
+                            <li class="dropdown-item">Hello, {{user.first_name}}</li>
+                            <a class="dropdown-item" href="logout">Logout</a>  
+                            {% else %}
+                            <a class="dropdown-item" href="login">Login</a>
+                            {% endif %}                            
+                        </div>
                         </div>
             </div>
         </nav>

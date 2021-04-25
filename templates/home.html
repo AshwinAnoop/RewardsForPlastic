@@ -30,7 +30,7 @@
                         <select required class="form-select btn-light btn-outline-dark" style="width: 300px;height:40px;border-radius:18px;" name="place" >
                             <option hidden>Select Nearest Locality</option>
                             {% for places in localities %}
-                            <option value="{{places.locality}}">{{places.locality}}</option>
+                            <option value="{{places.id}}">{{places.locality}}</option>
                             {% endfor %}
                         </select>
                         <input class="float-right btn btn-primary ml-1" type="submit" value="Go">
@@ -45,17 +45,21 @@
 
         <div class="container mt-5">
             <div class="row">
-                {% for lotobj in lotobjs %}
+                {% for shops in shopobj %}
                 <div class="col-md-3 ">
 
                     
                     <div class="card" style="width: 18rem;height: 28rem;">
-                        <img class="card-img-top" src="{{lotobj.image.url}}"
+                        <img class="card-img-top" src="{{shops.image.url}}"
                             alt="Card image cap" style="height: 17rem;">
                         <div class="card-body">
-                            <h5 class="card-title">{{lotobj.title}}</h5>
-                            <p class="card-text">Rs<b> {{lotobj.price}}</b>/hour </p>
-                            <a href="#" class="btn btn-primary">Book now</a>
+                            <h5 class="card-title">{{shops.name}}</h5>
+                            <p class="card-text"><b> {{shops.locality}}</b></p>
+                            <form action="/shopoverview" method="GET">
+                                {% csrf_token %}
+                                <input type="hidden" name="shopid" value="{{shops.id}}">
+                                <input class="float-right btn btn-primary ml-1" type="submit" value="Show more">
+                            </form>
                         </div>
                     </div>
                     

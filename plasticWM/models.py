@@ -7,8 +7,11 @@ from django.contrib.auth.models import User
 class locality(models.Model):
     locality = models.CharField(max_length = 30)
 
+    def __str__(self):
+        return self.locality
+
 class scrapshop(models.Model):
-    locality = models.CharField(max_length = 30)
+    locality = models.ForeignKey(locality , on_delete=models.DO_NOTHING)
     name = models.CharField(max_length = 100)
     description = models.TextField()
     capacity = models.IntegerField()
@@ -49,4 +52,5 @@ class shoppayment(models.Model):
 class extendeduser(models.Model):
     mobile = models.CharField(max_length = 12)
     address = models.TextField()
+    locality = models.ForeignKey(locality , on_delete=models.DO_NOTHING)
     user = models.OneToOneField(User,on_delete=models.CASCADE) 
