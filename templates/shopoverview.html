@@ -39,10 +39,11 @@
                             <p class="card-text">Description: <b>{{shops.description}}</b></p>
                             <p class="card-text">Mobile number: <b>{{shops.shopmobile}}</b></p>     
                             <a class="card-text btn btn-danger" href="{{shops.gmaplink}}" target="_blank">Get Direction</a>                      
-                            <form action="/shopoverview" method="GET">
+                            <form action="/shopoverview" method="POST">
                                 {% csrf_token %}
+                                <p class="mt-3" style="color: crimson;">***  ***  ***  ***  Apply for token only if you are currently at the shop  ***  ***  ***  ***</p>
                                 <input type="hidden" name="shopid" value="{{shops.id}}">
-                                <input class="float-right btn btn-primary " type="submit" value="Take a token to dispose plastic at shop">
+                                <input class="float-right btn btn-primary " type="submit" value="Take a token to dispose plastic at this shop">
                             </form>
                         </div>
                     </div>

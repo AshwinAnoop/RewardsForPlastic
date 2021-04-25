@@ -1,9 +1,10 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from django.contrib.auth.models import User,auth
-from .models import extendeduser,scrapshop,locality
+from .models import extendeduser,scrapshop,locality,disposal,wasteprice
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.utils import timezone
 
 
 # Create your views here.
@@ -73,7 +74,51 @@ def signup(request):
         return render(request,'signup.html',{'localities' : localities})
 
 
+def logout(request):
+    auth.logout(request)
+    return redirect('/')
+
+
 def shopoverview(request):
-    shopid = request.GET['shopid']
-    shopdetails = scrapshop.objects.filter(id=shopid)
-    return render(request,'shopoverview.html',{'shopdetails' : shopdetails})
+
+    if request.method == 'POST':
+        if request.user.is_authenticated:
+            shopid = request.POST['shopid']
+            userid = request.user.id
+            quality = 0
+            quantity = 0
+            newdisposal = disposal(userid_id=userid,shopid_id=shopid,quantity=quantity,quality=quality)
+            newdisposal.save();
+            messages.info(request,'Token has been succesfully issued')
+            return redirect('/')
+
+
+        else:
+            messages.info(request,'Login is required to continue')
+            return redirect('login')
+
+    else:
+        shopid = request.GET['shopid']
+        shopdetails = scrapshop.objects.filter(id=shopid)
+        return render(request,'shopoverview.html',{'shopdetails' : shopdetails})
+
+def shop(request):
+    if request.method == 'POST':
+        disposalid = request.POST['disposalid']
+        quality = request.POST['quality']
+        quantity = request.POST['quantity']
+        print (disposalid)
+        updatedisposal = disposal.objects.get(id=disposalid)
+        updatedisposal.quality = quality
+        updatedisposal.quantity = quantity
+        updatedisposal.disposaldone = True
+        updatedisposal.save();
+
+        messages.info(request,'verification successful')
+        return redirect('shop')
+
+
+    else:
+        disposeobj = disposal.objects.filter(disposaldone = False)
+        wastepriceobj = wasteprice.objects.all()
+        return render(request,'shop.html',{'disposeobj' : disposeobj , 'wastepriceobj' : wastepriceobj})

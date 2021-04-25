@@ -1,0 +1,84 @@
+{% extends 'base02.html' %}
+
+
+{% block additionalstyle %}
+<style>
+
+    #navdispose{
+        font-weight: bolder;
+        border-style: none none double none;
+        border-color: chartreuse;
+        border-bottom-width: thick;
+    }
+ </style>
+{% endblock %}
+
+
+{%  block content %}
+
+
+
+<section>
+    <div>
+        {% for message in messages %}
+        <h3 style="color:Tomato;">{{message}}</h3>
+        {% endfor %}
+    </div> 
+
+    
+    <div class="list-group">
+        {% for disposal in disposeobj %}
+        <a href="#" class="list-group-item list-group-item-action flex-column align-items-start active">
+          <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">{{disposal.userid.first_name}}</h5>
+            <small>{{disposal.disposaldate}}</small>
+          </div>
+          <p class="mb-1">Is it a delivery : {{disposal.pickuprequired}}</p>
+          <input class="float-right btn btn-danger mr-3 " type="button" value="cancel">
+          <input class="float-right btn btn-info " type="button" name="verifybutton"  id="verifybutton" value="Verify" onclick="onButtonClick()">
+
+          <form action="shop" method="POST" style="display: none;" id="verifyform">
+            {% csrf_token %}
+            <input type="hidden" name="disposalid" value="{{disposal.id}}">
+            
+            <label>Quality</label>
+            <select required class="form-select btn-light btn-outline-dark" style="width: 300px;height:40px;" name="quality" >
+                {% for qua in wastepriceobj %}
+                <option value="{{qua.id}}">{{qua.quality}}</option>
+                {% endfor %}
+            </select>
+
+            <label>Quantity</label>
+            <input class="form-input" type="number" style="width: 300px;height:40px;" name="quantity">
+            <input class="float-right btn btn-success " type="submit" value="Verify">
+ 
+        </form>
+          <small>{{disposal.shopid.name}}</small>
+        </a>
+        {% endfor %}
+    </div>
+    
+</section>
+
+<script>
+    function onButtonClick(){
+        var x = document.getElementById("verifybutton");
+        if (x.style.display === "none") {
+          x.style.display = "block";
+        } else {
+          x.style.display = "none";
+        }
+
+        var y = document.getElementById("verifyform");
+        if (y.style.display === "none") {
+          y.style.display = "block";
+        } else {
+          y.style.display = "none";
+        }
+      }
+
+
+
+</script>
+
+{% endblock %}
